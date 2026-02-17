@@ -1,5 +1,6 @@
 #define TRIG_PIN 2
 #define ECHO_PIN 3
+#define MOTOR_PIN 5
 
 bool running = true;
 
@@ -8,6 +9,7 @@ void setup() {
 
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
+  pinMode(MOTOR_PIN, OUTPUT);
 
 }
 
@@ -19,6 +21,7 @@ void loop() {
     if (cmd == 'p' || cmd == 'P') {
       running = false;
       Serial.println("Paused");
+      analogWrite(MOTOR_PIN, 0);
     }
 
     if (cmd == 'r' || cmd == 'R') {
@@ -26,7 +29,8 @@ void loop() {
     }
   }
   if(!running) {
-    delay(1500);
+    digitalWrite(MOTOR_PIN, LOW);
+    delay(200);
     return;
   }
 
@@ -47,6 +51,14 @@ void loop() {
   Serial.print("Distance: ");
   Serial.print(distance);
   Serial.println(" cm");
-  delay(1500);
+
+  if (distance >= 1 && distance <= 55) {
+    int power = map(distance, 1, 55, 255, 0);
+    power = constrain(power, 0, 255);
+    analogWrite(MOTOR_PIN, power);
+
+  } else analogWrite(MOTOR_PIN, 0);
+
+  delay(100);
 
 }
