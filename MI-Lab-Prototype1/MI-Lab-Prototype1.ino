@@ -52,8 +52,9 @@ void loop() {
   Serial.print(distance);
   Serial.println(" cm");
 
-  if (distance >= 1 && distance <= 55) {
-    int power = map(distance, 1, 55, 255, 0);
+
+  if (distance >= 1 && distance <= 80) {
+    int power = map(distance, 1, 80, 255, 10);
     power = constrain(power, 0, 255);
     analogWrite(MOTOR_PIN, power);
 
